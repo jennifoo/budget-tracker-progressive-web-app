@@ -2,7 +2,7 @@
 
 let db;
 
-conq request = indexedDB.open("budget", 1);
+const request = indexedDB.open("budget", 1);
 
 request.onupgradeneeded = function(event) {
   // db value changes upon version update
@@ -47,21 +47,28 @@ function checkDatabase() {
   const checkAll = store.getAll();
 
   // After the store method is sucessful
-  getAll().onsuccess = function(){
+  checkAll.onsuccess = function(){
     // If there are items in Object store
-    if (getAll().result.length > 0) {
+    if (checkAll.result.length > 0) {
       // Post items to database
       fetch("/api/transaction/bulk", {
         method: "POST",
-        body: JSON.stringify(getAll.result),
+        body: JSON.stringify(checkAll.result),
         headers: {
           Accept: "application/json, text/plain, */*", "Content-Type": "application/json"
         }
       })
+      .then(response => response.json())
+      .then(() => {
+        // Tap into storage and make it accesible
+        const transaction = db.transaction(["pending"], "readwrite");
+        // Specify which storage and identify with variable
+        const store = transaction.objectStore("pending");
+
+        store.clear();
+      });
     }
-  }
-
-
+  };
 }
 
 // Listens for when the browser is online again in order to run the checkDatabase function
