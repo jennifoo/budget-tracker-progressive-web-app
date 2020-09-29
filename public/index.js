@@ -15,7 +15,7 @@ fetch("/api/transaction")
     populateChart();
   });
 
-// Calculate Total
+// POPULATE: Calculate Total
 function populateTotal() {
   // reduce transaction amounts to a single total value
   let total = transactions.reduce((total, t) => {
@@ -26,7 +26,7 @@ function populateTotal() {
   totalEl.textContent = total;
 }
 
-// Update DOM table with Transactions
+// POPULATE: Update DOM table with Transactions
 function populateTable() {
   let tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
@@ -43,7 +43,7 @@ function populateTable() {
   });
 }
 
-// Graphic
+// GRAPHIC
 function populateChart() {
   // copy array and reverse it
   let reversed = transactions.slice().reverse();
