@@ -1,3 +1,5 @@
+// OBJECTIVE: Create Object Store to store failed user POST request when offline. Once online, check storage for items and POST to database then clear out Object Store.
+
 let db;
 
 conq request = indexedDB.open("budget", 1);
@@ -8,8 +10,6 @@ request.onupgradeneeded = function(event) {
   // Create Object Store called "pending" with an auto increment column
   db.createObjectStore("pending", { autoIncrement: true});
 }
-
-// Need to be able to push pending transactions into the API post request once online again.
 
 request.onsuccess = function(event) {
   // db value changes upon success
@@ -25,12 +25,10 @@ request.onerror = function(event) {
   console.log("Error code " + event.target.errorCode);
 }
 
-
 // Take transaction send via front-end and store into object store
 function saveRecord(record) {
   // Tap into storage and make it accesible
   const transaction = db.transaction(["pending"], "readwrite");
-
   // Specify which storage and identify with variable
   const store = transaction.objectStore("pending");
 
@@ -39,35 +37,32 @@ function saveRecord(record) {
 
 }
 
-// Once online, check to see if anything is in the object sore and POST to /api/transaction/bulk (need to send over object) which will InsertMany into Transaction table.
+// Once online, check to see if anything is in the Object Store and POST to /api/transaction/bulk (need to send over object) which will InsertMany into Transaction table.
 function checkDatabase() {
+  // Tap into storage and make it accesible
+  const transaction = db.transaction(["pending"], "readwrite");
+  // Specify which storage and identify with variable
+  const store = transaction.objectStore("pending");
+
+  const checkAll = store.getAll();
+
+  // After the store method is sucessful
+  getAll().onsuccess = function(){
+    // If there are items in Object store
+    if (getAll().result.length > 0) {
+      // Post items to database
+      fetch("/api/transaction/bulk", {
+        method: "POST",
+        body: JSON.stringify(getAll.result),
+        headers: {
+          Accept: "application/json, text/plain, */*", "Content-Type": "application/json"
+        }
+      })
+    }
+  }
+
 
 }
 
 // Listens for when the browser is online again in order to run the checkDatabase function
 window.addEventListener("online", checkDatabase);
-
-
-
-
-
-/* const transactionSchema = new Schema(
-  {
-    name: {
-      type: String,
-      trim: true,
-      required: "Enter a name for transaction"
-    },
-    value: {
-      type: Number,
-      required: "Enter an amount"
-    },
-    date: {
-      type: Date,
-      default: Date.now
-    }
-  }
-);
-const Transaction = mongoose.model("Transaction", transactionSchema);
-module.exports = Transaction;
-*/
