@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+// Database Name = budget
 mongoose.connect("mongodb://localhost/budget", {
   useNewUrlParser: true,
   useFindAndModify: false

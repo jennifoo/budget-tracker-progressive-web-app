@@ -1,6 +1,7 @@
 let transactions = [];
 let myChart;
 
+// Automatic GET request, update Transaction Array, and run population functions
 fetch("/api/transaction")
   .then(response => {
     return response.json();
@@ -14,6 +15,7 @@ fetch("/api/transaction")
     populateChart();
   });
 
+// Calculate Total
 function populateTotal() {
   // reduce transaction amounts to a single total value
   let total = transactions.reduce((total, t) => {
@@ -24,6 +26,7 @@ function populateTotal() {
   totalEl.textContent = total;
 }
 
+// Update DOM table with Transactions
 function populateTable() {
   let tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
@@ -40,6 +43,7 @@ function populateTable() {
   });
 }
 
+// Graphic
 function populateChart() {
   // copy array and reverse it
   let reversed = transactions.slice().reverse();
@@ -78,6 +82,7 @@ function populateChart() {
   });
 }
 
+// SEND TRANSACTION
 function sendTransaction(isAdding) {
   let nameEl = document.querySelector("#t-name");
   let amountEl = document.querySelector("#t-amount");
@@ -111,7 +116,7 @@ function sendTransaction(isAdding) {
   populateChart();
   populateTable();
   populateTotal();
-  
+
   // also send to server
   fetch("/api/transaction", {
     method: "POST",
@@ -121,7 +126,7 @@ function sendTransaction(isAdding) {
       "Content-Type": "application/json"
     }
   })
-  .then(response => {    
+  .then(response => {
     return response.json();
   })
   .then(data => {
