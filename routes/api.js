@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const Transaction = require("../models/transaction.js");
 
+router.get("/", function(req, res) {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
+
 // SINGLE POST
 router.post("/api/transaction", ({body}, res) => {
   Transaction.create(body)
