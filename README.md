@@ -15,11 +15,11 @@ Functionality for sending expenses and deposits to the database while offline, i
 After user is back online, our application checks the offline storage of items and then sends it back to the online server so that the information is persistent and up-to-date.
 
 * Offline Functionality:
-** Enter deposits
-** Enter expenses
+  * Enter deposits
+  * Enter expenses
 
 * When Brought Back Online:
-** Offline entries should be added to database.
+  * Offline entries should be added to database.
 
 ## Business Context
 This application gives users a fast and easy way to track their money and allows them to access that information anytime wether traveling, online or offline.
