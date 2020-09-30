@@ -7,7 +7,7 @@ The Budget Tracker App is a progressive web application that helps users keep tr
 ## View Application:
 
 * [Heroku Link: https://jenn-budget-tracker-pwa.herokuapp.com/](https://jenn-budget-tracker-pwa.herokuapp.com/)
-<img src ="./assets/" alt="budget tracker progressive web application">
+<img src ="./assets/budget-tracker-pwa" alt="budget tracker progressive web application">
 
 ## Functionality
 Functionality for sending expenses and deposits to the database while offline, is accomplished through storing user transaction activity into the IndexedDB database that's built into the browser.
